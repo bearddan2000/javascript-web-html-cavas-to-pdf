@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Timmy Beard</title>
+    <link rel="stylesheet" href="bootstrap.min.css"/>
+    <style>
+      .item0 {font-size: medium; font-weight: bold; grid-area: header ;}
+      .item1 { grid-area: sleep; }
+      .item2 { grid-area: sleep-notes; }
+      .item3 { grid-area: eat; }
+      .item4 { grid-area: eat-notes; }
+      .item5 { grid-area: routine; }
+      .item6 { grid-area: routine-notes; }
+      .item7 { grid-area: notes; }
+      .item8 { grid-area: nightly }
+      .item9 { grid-area: nightly-notes }
+
+      .flex-container {
+          display: grid; /* or inline-flex */
+          /*border: 2px seashell;*/
+          grid-template-areas:'header header header header header' 
+                              'nightly sleep eat routine notes'
+                              "nightly-notes sleep-notes eat-notes routine-notes notes";
+          gap: 10px;
+          padding: 10px;
+      }
+
+      .flex-container > div {
+          padding: 20px 10px;
+          text-align: center;
+          color: black;
+          background-color: powderblue;
+      }
+      .status-great {color: darkgreen;}
+      .status-ok {color: darkkhaki;}
+      .status-attention {color: darkred}
+
+      footer {
+        text-align: right;
+        font-style: italic;
+        font-size: small;
+      }
+
+    </style>
+  </head>
+  <body>
+    <!-- this is header -->
+    <nav class="navbar navbar-inverse static-top">
+          <a class="navbar-brand">Timmy Beard</a>
+    </nav>
+    <div class="container">
+      <button id="print-button" onclick="onClick()">Html2Pdf</button>
+      <div id="current">
+        <h2>Today's report Status</h2>
+        <table class="table table-striped">
+          <tr>
+            <th>Bedtime</th>
+            <th>Sleep</th>
+            <th>Breakfast</th>
+            <th>Morning</th>
+          </tr>
+          <tr>
+            <td class="status-great">Great</td>
+            <td class="status-great">Great</td>
+            <td class="status-ok">A little breakfast</td>
+            <td class="status-great">Normal, nothing different</td>
+          </tr>
+        </table>
+        <h2>Today's report Notes</h2>
+        <div class="flex-container">
+          <div class="item0">Thurssday</div>
+          <div class="item8">Bedtime</div>
+          <div class="item9">9:40pm - 7:30am</div>
+          <div class="item1">Sleep</div>
+          <div class="item2">N/A</div>
+          <div class="item3">Breakfast</div>
+          <div class="item4">2 cinna rolls and 2 donettes</div>
+          <div class="item5">Morning</div>
+          <div class="item6">N/A</div>
+          <div class="item7">Notes: 2 hr delay</div>
+        </div>
+      </div>
+    </div>
+
+    <footer>* Week #2 * 01-22 to 01-27</footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.3/jspdf.min.js"></script>
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script>
+      function onClick () {
+            const domElement = document.body
+            html2canvas(domElement, { onclone: (document) => {
+              document.getElementById('print-button').style.visibility = 'hidden'
+            }})
+            .then((canvas) => {
+                const imgData = canvas.toDataURL('image/jpeg')
+                var pdf = new jsPDF('p', 'pt', 'letter');
+                pdf.canvas.height = 72 * 6;
+                pdf.canvas.width = 72 * 8.5;
+                pdf.addImage(imgData, 'JPEG', 0, 0, pdf.canvas.width, pdf.canvas.height)
+                pdf.save('01.pdf')
+            })
+      }
+      fetch("http://localhost/data.json")
+      .then(response => response.json())
+      .then(json => console.log(json));
+      // https://stackoverflow.com/questions/47632710/html2canvas-creating-multiple-divs
+      // https://devcodef1.com/news/1011797/page-break-in-jspdf
+      // https://stackoverflow.com/questions/16858954/how-to-properly-use-jspdf-library
+      // https://blog.risingstack.com/pdf-from-html-node-js-puppeteer/
+    </script>
+  </body>
+</html>
