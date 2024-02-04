@@ -96,7 +96,7 @@ function start-up(){
 
     echo "$info_base starting services" >> $logfile
 
-    sudo docker-compose up --build
+    sudo docker --rm -p 80:80 -v $(pwd)/bin:/usr/local/apache2/htdocs httpd:latest
 
     echo "$info_base ended" >> $logfile
 
