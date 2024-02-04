@@ -1,4 +1,4 @@
-# javascript-web-html-to-pdf
+# javascript-web-html-cavas-to-pdf
 
 ## Description
 A demo of html rendering to pdf. In this demo
